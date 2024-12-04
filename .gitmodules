@@ -1,0 +1,3 @@
+[submodule "LyricsGenius"]
+	path = LyricsGenius
+	url = git@github.com:johnwmillr/LyricsGenius.git
