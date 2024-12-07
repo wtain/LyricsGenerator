@@ -42,6 +42,7 @@ def process_artist(artist):
         print(f"Processing {artist} - {song.title}")
         save_lyrics(song)
 
+
 artists = [
     "Children of Bodom",
     "Bodom After Midnight",
@@ -55,6 +56,8 @@ artists = [
     "System of a Down",
     "Slayer",
     "Eternal Tears Of Sorrow",
+    "Iron Maiden",
+    "Manowar",
 ]
 
 for artist in artists:

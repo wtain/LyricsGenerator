@@ -32,7 +32,8 @@ class LyricsPreprocessor:
 
     @staticmethod
     def replace_characters(lyrics):
-        return lyrics.replace('е', 'e')
+        return (lyrics.replace('е', 'e')
+                .replace(u'\u03bc', 'mu'))
 
     @staticmethod
     def preprocess(lyrics):
