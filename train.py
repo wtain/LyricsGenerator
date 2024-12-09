@@ -29,7 +29,11 @@ def main():
     dataset = load_dataset("text", data_files={"train": dataset_path})
 
     # Load pre-trained GPT-2 tokenizer and model
+    # todo: Download the database
+    # todo: adjust the tokens, pass special_tokens to the trainer
+    # todo: adjust the model size according to the dataset size
     model_name = "gpt2"  # You can also try "gpt2-medium" or other variants
+    # model_name = "gpt2-large"  # You can also try "gpt2-medium" or other variants
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
     tokenizer.pad_token = tokenizer.eos_token
     model = GPT2LMHeadModel.from_pretrained(model_name)

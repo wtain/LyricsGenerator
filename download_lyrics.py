@@ -6,6 +6,7 @@ from Environment import Environment
 from LyricsGenius.lyricsgenius.genius import Genius
 from LyricsPreprocessor import LyricsPreprocessor
 
+from Commons import Commons
 
 def save_lyrics(song):
 
@@ -27,7 +28,7 @@ def save_lyrics(song):
     with open(filename_lyrics, 'w', encoding="utf-8") as file:
         file.write(song.lyrics)
 
-    lyrics = LyricsPreprocessor.preprocess(song.lyrics)
+    lyrics = LyricsPreprocessor.preprocess(song.lyrics, song.title)
 
     words = Counter(split_words(lyrics))
     stats = "\n".join(f"{word}: {words[word]}" for word in sorted(words, key=lambda w: -words[w]))
@@ -43,22 +44,5 @@ def process_artist(artist):
         save_lyrics(song)
 
 
-artists = [
-    "Children of Bodom",
-    "Bodom After Midnight",
-    "Sinergy",
-    "Kalmah",
-    "Norther",
-    "Skyfire",
-    "Mors Principium Est",
-    "Nekrogoblikon",
-    "Dimmu Borgir",
-    "System of a Down",
-    "Slayer",
-    "Eternal Tears Of Sorrow",
-    "Iron Maiden",
-    "Manowar",
-]
-
-for artist in artists:
+for artist in Commons.artists:
     process_artist(artist)

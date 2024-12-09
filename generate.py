@@ -4,6 +4,8 @@ import torch
 from datasets import load_dataset
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
+from LyricsPreprocessor import LyricsPreprocessor
+
 # Load the fine-tuned model and tokenizer
 model = GPT2LMHeadModel.from_pretrained("./fine_tuned_gpt2")
 tokenizer = GPT2Tokenizer.from_pretrained("./fine_tuned_gpt2")
@@ -16,7 +18,8 @@ model.to(device)
 # Define a prompt to start the text generation
 # prompt = "In the beginning, the world was"
 # prompt = "That darkness"
-prompt = "i try my hardest to be stronger than"
+# prompt = "i try my hardest to be stronger than"
+prompt = f"{LyricsPreprocessor.MARKER_SONG_START}{LyricsPreprocessor.MARKER_SONG_NAME_START}"
 
 # dataset_path = "dataset.txt"  # Replace with your dataset path
 # dataset = load_dataset("text", data_files={"train": dataset_path})
