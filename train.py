@@ -5,6 +5,8 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer, Trainer, TrainingArgume
 from datasets import load_dataset
 import torch
 
+from LyricsPreprocessor import LyricsPreprocessor
+
 
 # print("PyTorch version:", torch.__version__)
 # print("CUDA available:", torch.cuda.is_available())
@@ -29,14 +31,28 @@ def main():
     dataset = load_dataset("text", data_files={"train": dataset_path})
 
     # Load pre-trained GPT-2 tokenizer and model
-    # todo: Download the database
+    # todo: Download the dataset
     # todo: adjust the tokens, pass special_tokens to the trainer
     # todo: adjust the model size according to the dataset size
+
     model_name = "gpt2"  # You can also try "gpt2-medium" or other variants
     # model_name = "gpt2-large"  # You can also try "gpt2-medium" or other variants
+    out_model = "./fine_tuned_gpt2"
+
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
     tokenizer.pad_token = tokenizer.eos_token
+    special_tokens = {
+        "additional_special_tokens": [
+            LyricsPreprocessor.MARKER_END_OF_LINE,
+            LyricsPreprocessor.MARKER_SONG_NAME_START,
+            LyricsPreprocessor.MARKER_SONG_NAME_END,
+            LyricsPreprocessor.MARKER_SONG_START,
+            LyricsPreprocessor.MARKER_SONG_END,
+        ]
+    }
+    tokenizer.add_special_tokens(special_tokens)
     model = GPT2LMHeadModel.from_pretrained(model_name)
+    model.resize_token_embeddings(len(tokenizer))
 
     # Move the model to the GPU
     model = model.to("cuda")
@@ -65,7 +81,8 @@ def main():
         save_total_limit=2,           # Keep only the last 2 checkpoints
         logging_dir="./logs",         # Directory for logs
         logging_steps=50,             # Log every 50 steps
-        eval_strategy="steps",        # Evaluate the model during training
+        # eval_strategy="steps",        # Evaluate the model during training
+        eval_strategy="no",        # Evaluate the model during training
         eval_steps=500,               # Evaluation frequency
         learning_rate=5e-5,           # Learning rate
         warmup_steps=500,             # Warmup steps for learning rate
@@ -84,8 +101,8 @@ def main():
     trainer.train()
 
     # Save the fine-tuned model
-    model.save_pretrained("./fine_tuned_gpt2")
-    tokenizer.save_pretrained("./fine_tuned_gpt2")
+    model.save_pretrained(out_model)
+    tokenizer.save_pretrained(out_model)
 
 if __name__ == "__main__":
     main()

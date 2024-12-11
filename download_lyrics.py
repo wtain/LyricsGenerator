@@ -35,7 +35,7 @@ def save_lyrics(song):
     with open(filename_stats, 'w', encoding="utf-8") as file:
         file.write(stats)
 
-genius = Genius(Environment.read_token(), sleep_time=0.05)
+genius = Genius(Environment.read_token(), sleep_time=0.05, timeout=20)
 
 def process_artist(artist):
     artist = genius.search_artist(artist, allow_name_change=False)

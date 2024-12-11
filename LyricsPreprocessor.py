@@ -43,7 +43,7 @@ class LyricsPreprocessor:
         # lyrics = LyricsPreprocessor.filter_allowed_characters(lyrics)
         # lyrics = LyricsPreprocessor.decapitalize(lyrics)
         lyrics = lyrics.replace('\n', LyricsPreprocessor.MARKER_END_OF_LINE)
-        lyrics = f"{LyricsPreprocessor.MARKER_SONG_START}{LyricsPreprocessor.MARKER_SONG_NAME_START}{title}{LyricsPreprocessor.MARKER_SONG_NAME_END}{lyrics}{LyricsPreprocessor.MARKER_SONG_END}"
+        lyrics = f"{LyricsPreprocessor.MARKER_SONG_NAME_START}{title}{LyricsPreprocessor.MARKER_SONG_NAME_END}{LyricsPreprocessor.MARKER_SONG_START}{lyrics}{LyricsPreprocessor.MARKER_SONG_END}"
         # return LyricsPreprocessor.remove_special_unicode_chars(lyrics)
         return lyrics
 
@@ -52,4 +52,4 @@ LyricsPreprocessor.MARKER_END_OF_LINE = '{END_OF_LINE}'
 LyricsPreprocessor.MARKER_SONG_NAME_START = '{SONG_NAME}'
 LyricsPreprocessor.MARKER_SONG_NAME_END = '{/SONG_NAME}'
 LyricsPreprocessor.MARKER_SONG_START = '{SONG_START}'
-LyricsPreprocessor.MARKER_SONG_END = '{END_START}'
+LyricsPreprocessor.MARKER_SONG_END = '{END_START}' # todo: end song!
