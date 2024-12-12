@@ -49,7 +49,7 @@ class LyricsPreprocessor:
 
 
 LyricsPreprocessor.MARKER_END_OF_LINE = '{END_OF_LINE}'
-LyricsPreprocessor.MARKER_SONG_NAME_START = '{SONG_NAME}'
-LyricsPreprocessor.MARKER_SONG_NAME_END = '{/SONG_NAME}'
+LyricsPreprocessor.MARKER_SONG_NAME_START = '{SONG_NAME_START}'
+LyricsPreprocessor.MARKER_SONG_NAME_END = '{SONG_NAME_END}'
 LyricsPreprocessor.MARKER_SONG_START = '{SONG_START}'
-LyricsPreprocessor.MARKER_SONG_END = '{END_START}' # todo: end song!
+LyricsPreprocessor.MARKER_SONG_END = '{SONG_END}'

@@ -63,7 +63,13 @@ def main():
     def tokenize_function(examples):
         # Create input_ids and labels
         # The labels are the same as input_ids
-        encodings = tokenizer(examples["text"], truncation=True, padding="max_length", max_length=128)
+        encodings = tokenizer(examples["text"],
+                              truncation=True,
+                              padding="max_length",
+                              max_length=128,
+                              return_tensors="pt",  # Returns PyTorch tensors
+                              return_attention_mask=True
+        )
         encodings["labels"] = encodings["input_ids"].copy()  # Set labels to input_ids
         return encodings
 
