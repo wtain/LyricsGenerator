@@ -1,22 +1,12 @@
-# from multiprocessing import freeze_support
 import os
 
 from transformers import GPT2LMHeadModel, GPT2Tokenizer, Trainer, TrainingArguments
 from datasets import load_dataset
 import torch
 
+from Commons import Commons
 from LyricsPreprocessor import LyricsPreprocessor
 
-
-# print("PyTorch version:", torch.__version__)
-# print("CUDA available:", torch.cuda.is_available())
-# print("Current device:", torch.cuda.current_device())
-# print("Device name:", torch.cuda.get_device_name(torch.cuda.current_device()))
-
-# if __name__ == '__main__':
-#     freeze_support()
-# else:
-#     exit()
 
 def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -30,27 +20,13 @@ def main():
     dataset_path = "dataset.txt"  # Replace with your dataset path
     dataset = load_dataset("text", data_files={"train": dataset_path})
 
-    # Load pre-trained GPT-2 tokenizer and model
-    # todo: Download the dataset
-    # todo: adjust the tokens, pass special_tokens to the trainer
-    # todo: adjust the model size according to the dataset size
-
     model_name = "gpt2"  # You can also try "gpt2-medium" or other variants
     # model_name = "gpt2-large"  # You can also try "gpt2-medium" or other variants
     out_model = "./fine_tuned_gpt2"
 
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
     tokenizer.pad_token = tokenizer.eos_token
-    special_tokens = {
-        "additional_special_tokens": [
-            LyricsPreprocessor.MARKER_END_OF_LINE,
-            LyricsPreprocessor.MARKER_SONG_NAME_START,
-            LyricsPreprocessor.MARKER_SONG_NAME_END,
-            LyricsPreprocessor.MARKER_SONG_START,
-            LyricsPreprocessor.MARKER_SONG_END,
-        ]
-    }
-    tokenizer.add_special_tokens(special_tokens)
+    tokenizer.add_special_tokens(Commons.special_tokens)
     model = GPT2LMHeadModel.from_pretrained(model_name)
     model.resize_token_embeddings(len(tokenizer))
 
@@ -87,7 +63,6 @@ def main():
         save_total_limit=2,           # Keep only the last 2 checkpoints
         logging_dir="./logs",         # Directory for logs
         logging_steps=50,             # Log every 50 steps
-        # eval_strategy="steps",        # Evaluate the model during training
         eval_strategy="no",        # Evaluate the model during training
         eval_steps=500,               # Evaluation frequency
         learning_rate=5e-5,           # Learning rate

@@ -1,11 +1,10 @@
 import os
-import random
-from datetime import datetime, date
+from datetime import datetime
 
 import torch
-from datasets import load_dataset
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
+from Commons import Commons
 from LyricsPreprocessor import LyricsPreprocessor
 
 # Load the fine-tuned model and tokenizer
@@ -17,17 +16,8 @@ output_dir = "./output"
 os.makedirs(output_dir, exist_ok=True)
 generation_count = 20
 
-# copied from train.py
-special_tokens = {
-    "additional_special_tokens": [
-        LyricsPreprocessor.MARKER_END_OF_LINE,
-        LyricsPreprocessor.MARKER_SONG_NAME_START,
-        LyricsPreprocessor.MARKER_SONG_NAME_END,
-        LyricsPreprocessor.MARKER_SONG_START,
-        LyricsPreprocessor.MARKER_SONG_END,
-    ]
-}
-tokenizer.add_special_tokens(special_tokens)
+
+tokenizer.add_special_tokens(Commons.special_tokens)
 
 
 # Make sure the model is on the correct device (GPU if available)
@@ -37,13 +27,6 @@ model.resize_token_embeddings(len(tokenizer))
 model.to(device)
 # model.pad_token_id = model.eos_token_id
 
-# Define a prompt to start the text generation
-# prompt = "In the beginning, the world was"
-# prompt = "That darkness"
-# prompt = "i try my hardest to be stronger than"
-
-
-# prompt = f"{LyricsPreprocessor.MARKER_SONG_START}{LyricsPreprocessor.MARKER_SONG_NAME_START}"
 prompt = f"{LyricsPreprocessor.MARKER_SONG_NAME_START}"
 
 # dataset_path = "dataset.txt"  # Replace with your dataset path
@@ -56,31 +39,11 @@ input_ids = tokenizer.encode(prompt, return_tensors="pt").to(device)
 # input_ids = tokenizer["input_ids"].to(device)
 # attention_mask = tokenizer["attention_mask"].to(device)
 
-# forced_tokens = tokenizer.convert_tokens_to_ids([
-#     LyricsPreprocessor.MARKER_SONG_NAME_END,
-#     LyricsPreprocessor.MARKER_SONG_END,
-# ])
-
-id0 = tokenizer.convert_tokens_to_ids(LyricsPreprocessor.MARKER_SONG_NAME_START)
-id1 = tokenizer.convert_tokens_to_ids(LyricsPreprocessor.MARKER_SONG_NAME_END)
-id2 = tokenizer.convert_tokens_to_ids(LyricsPreprocessor.MARKER_SONG_START)
-id3 = tokenizer.convert_tokens_to_ids(LyricsPreprocessor.MARKER_SONG_END)
-forced_tokens = [[id1], [id2], [id3]]
-
-# forced_tokens = tokenizer.encode([
-#     LyricsPreprocessor.MARKER_SONG_NAME_END,
-#     LyricsPreprocessor.MARKER_SONG_END,
-# ], return_tensors="pt").to(device)
-
-# forced_tokens = tokenizer.convert_tokens_to_ids([
-#     # tokenizer([LyricsPreprocessor.MARKER_SONG_NAME_END], add_prefix_space=True, add_special_tokens=False).input_ids,
-#     # tokenizer([LyricsPreprocessor.MARKER_SONG_END], add_prefix_space=True, add_special_tokens=False).input_ids,
-#
-#     [tokenizer.encode(LyricsPreprocessor.MARKER_SONG_NAME_END, add_prefix_space=True, add_special_tokens=False, return_tensors="pt").to(device)],
-#     [tokenizer.encode(LyricsPreprocessor.MARKER_SONG_END, add_prefix_space=True, add_special_tokens=False, return_tensors="pt").to(device)],
-# ])
-
-
+token_song_name_start = tokenizer.convert_tokens_to_ids(LyricsPreprocessor.MARKER_SONG_NAME_START)
+token_song_name_end = tokenizer.convert_tokens_to_ids(LyricsPreprocessor.MARKER_SONG_NAME_END)
+token_song_start = tokenizer.convert_tokens_to_ids(LyricsPreprocessor.MARKER_SONG_START)
+token_song_end = tokenizer.convert_tokens_to_ids(LyricsPreprocessor.MARKER_SONG_END)
+forced_tokens = [[token_song_name_end], [token_song_start], [token_song_end]]
 
 def postprocess(lyrics):
     lyrics = lyrics.replace(LyricsPreprocessor.MARKER_END_OF_LINE, '\n')
@@ -104,8 +67,8 @@ for i in range(generation_count):
 
         pad_token_id=tokenizer.eos_token_id,
         # force_words_ids=forced_tokens,
-        forced_bos_token_id=id0, # song name start
-        forced_eos_token_id=id3, # song end
+        forced_bos_token_id=token_song_name_start, # song name start
+        forced_eos_token_id=token_song_end, # song end
         # attention_mask=attention_mask,
         num_beams=10,
         # do_sample=False,

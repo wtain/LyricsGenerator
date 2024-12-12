@@ -1,6 +1,9 @@
 
+from LyricsPreprocessor import LyricsPreprocessor
+
 class Commons:
     artists = None
+    special_tokens = None
 
 
 Commons.artists = [
@@ -52,3 +55,13 @@ Commons.artists = [
     "Dethklok",
     "Be'lakor",
 ]
+
+Commons.special_tokens = {
+    "additional_special_tokens": [
+        LyricsPreprocessor.MARKER_END_OF_LINE,
+        LyricsPreprocessor.MARKER_SONG_NAME_START,
+        LyricsPreprocessor.MARKER_SONG_NAME_END,
+        LyricsPreprocessor.MARKER_SONG_START,
+        LyricsPreprocessor.MARKER_SONG_END,
+    ]
+}

@@ -22,7 +22,6 @@ def prepare_dataset(artists, output_file_name):
                         if len(content) == 0:
                             continue
                         lyrics = LyricsPreprocessor.preprocess(content, title)
-                        # lyrics = lyrics.replace('\n', ' ')
                         dataset_filename.write(lyrics)
                         dataset_filename.write('\n')
                         num_lines += 1
