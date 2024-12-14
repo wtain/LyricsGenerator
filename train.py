@@ -17,7 +17,6 @@ def main():
     dataset = load_dataset("text", data_files={"train": dataset_path})
 
     model_name = "gpt2"  # You can also try "gpt2-medium" or other variants
-    # model_name = "gpt2-large"  # You can also try "gpt2-medium" or other variants
     out_model = "./fine_tuned_gpt2"
     num_train_epochs = 3
 
@@ -40,16 +39,6 @@ def train_model(dataset, model_name, num_train_epochs, out_model):
         # The labels are the same as input_ids
         encodings = tokenizer(examples["text"], truncation=True, padding="max_length", max_length=128)
         encodings["labels"] = encodings["input_ids"].copy()  # Set labels to input_ids
-        # encodings = tokenizer(examples["text"],
-        #                       truncation=True,
-        #                       padding="max_length",
-        #                       max_length=128,
-        #                       return_tensors="pt",  # Returns PyTorch tensors
-        #                       return_attention_mask=True
-        #                       )
-        # # Set labels equal to input_ids, replacing padding tokens with -100
-        # encodings["labels"] = encodings["input_ids"].clone()
-        # encodings["labels"][encodings["labels"] == tokenizer.pad_token_id] = -100
         return encodings
 
     tokenized_dataset = dataset.map(tokenize_function, batched=True, num_proc=4, remove_columns=["text"])
