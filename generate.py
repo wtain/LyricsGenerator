@@ -88,5 +88,5 @@ for i in range(generation_count):
     # generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
     generated_text = tokenizer.decode(output[0], skip_special_tokens=False)
     postprocessed_lyrics = postprocess(generated_text)
-    with open(filename, "w") as file:
+    with open(filename, "w", encoding="utf-8") as file:
         file.write(postprocessed_lyrics)
