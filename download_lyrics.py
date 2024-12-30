@@ -20,13 +20,20 @@ def save_lyrics(song):
     with open(filename_lyrics, 'w', encoding="utf-8") as file:
         file.write(song.lyrics)
 
-genius = Genius(Environment.read_token(), sleep_time=0.05, timeout=20)
+genius = Genius(Environment.read_token(), sleep_time=0.01, timeout=25)
 
 def process_artist(artist):
     artist = genius.search_artist(artist, allow_name_change=False)
     for song in artist.songs:
         print(f"Processing {artist} - {song.title}")
         save_lyrics(song)
+    # try:
+    #     artist = genius.search_artist(artist, allow_name_change=False)
+    #     for song in artist.songs:
+    #         print(f"Processing {artist} - {song.title}")
+    #         save_lyrics(song)
+    # except Exception as e:
+    #     print(f"Error: {e}")
 
 
 for artist in Commons.artists:

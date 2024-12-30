@@ -8,7 +8,7 @@ from Commons import Commons
 
 
 def main():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    # os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
     print_system_info()
 
@@ -16,7 +16,8 @@ def main():
     dataset_path = "dataset.txt"  # Replace with your dataset path
     dataset = load_dataset("text", data_files={"train": dataset_path})
 
-    model_name = "gpt2"  # You can also try "gpt2-medium" or other variants
+    # model_name = "gpt2"  # You can also try "gpt2-medium" or other variants
+    model_name = "gpt2-medium"  # You can also try "gpt2-medium" or other variants
     out_model = "./fine_tuned_gpt2"
     num_train_epochs = 3
 
